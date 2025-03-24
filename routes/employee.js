@@ -113,15 +113,24 @@ router.put('/:id/leave/add', async (req, res) => {
       { new: true }
     );
 
-    if (!updatedEmployee) {
+    if (!updatedEmployee) 
+    
+    {
       return res.status(404).json({ message: 'Employee not found' });
     }
 
     res.status(200).json({ message: 'Leave dates added successfully', employee: updatedEmployee });
-  } catch (error) {
+
+
+  } 
+  
+  
+  catch (error) {
     console.error("Error adding leave dates:", error);
     res.status(500).json({ message: 'Error adding leave dates', error });
   }
+
+  
 });
 
 

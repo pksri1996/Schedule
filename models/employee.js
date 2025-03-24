@@ -35,8 +35,10 @@ const employeeSchema = new Schema({
      type: Date,
      default: new Date('1900-04-01') // This is for the last date of working in central zone
     },
-
-  leaves: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Leave' }]
+    leaveDates: {
+      type: [Date],
+      default: []
+    }
 });
 
 const Employee = mongoose.model('Employee', employeeSchema);
