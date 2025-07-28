@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, lazy, Suspense } from 'react';
+import './App.css';
+import EmployeeTable from './components/employeeTable/employeeTable';
+import AddEmployeeForm from './components/employeeTable/addEmployee';
+import { Button, Box, CircularProgress } from '@mui/material';
+
+// ✅ Lazy load dialogs
+const AddScheduleDialog = lazy(() => import('./components/ScheduleTable/addSchedule'));
+const ViewSchedulesDialog = lazy(() => import('./components/ScheduleTable/viewSchedule'));
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [openAddSchedule, setOpenAddSchedule] = useState(false);
+  const [openViewSchedules, setOpenViewSchedules] = useState(false);
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Box display="flex" gap={2} p={2}>
+        <Button variant="contained" onClick={() => setOpenAddSchedule(true)}>
+          Add Schedule
+        </Button>
+        <Button variant="outlined" onClick={() => setOpenViewSchedules(true)}>
+          View Schedules
+        </Button>
+      </Box>
+
+      {/* ✅ Lazy-loaded dialogs inside Suspense */}
+      <Suspense fallback={<CircularProgress />}>
+        {openAddSchedule && (
+          <AddScheduleDialog open={openAddSchedule} onClose={() => setOpenAddSchedule(false)} />
+        )}
+        {openViewSchedules && (
+          <ViewSchedulesDialog open={openViewSchedules} onClose={() => setOpenViewSchedules(false)} />
+        )}
+      </Suspense>
+
+      <AddEmployeeForm />
+      <p style={{ marginBottom: '3rem' }}></p>
+      <EmployeeTable />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
